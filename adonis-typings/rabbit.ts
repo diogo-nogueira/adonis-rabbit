@@ -198,6 +198,14 @@ declare module '@ioc:Adonis/Addons/Rabbit' {
      * @default "amqp"
      */
     protocol?: string
+
+    /**
+     * The RabbitMQ parameters
+     *
+     * @example {timeout: 60}
+     * @default {}
+     */
+    parameters?: any
   }
 
   const Rabbit: RabbitManagerContract

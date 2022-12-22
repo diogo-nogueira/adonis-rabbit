@@ -28,6 +28,11 @@ export default class RabbitConnection {
    */
   private readonly $protocol: string
 
+  /**
+   * The params
+   */
+  private readonly $parameters: string
+
   constructor(private readonly rabbitConfig: RabbitConfig) {
     this.$credentials = this.handleCredentials(
       this.rabbitConfig.user,
@@ -45,6 +50,8 @@ export default class RabbitConnection {
     )
 
     this.$protocol = this.handleProtocol(this.rabbitConfig.protocol)
+
+    this.$parameters = this.handleParams(this.rabbitConfig.parameters)
   }
 
   /**
@@ -90,6 +97,19 @@ export default class RabbitConnection {
    *
    * @param protocol
    */
+  private handleParams(parameters: RabbitConfig['parameters']) {
+    if (!parameters) {
+      parameters = {}
+    }
+
+    return parameters
+  }
+
+  /**
+   * Custom params
+   *
+   * @param params
+   */
   private handleProtocol(protocol: RabbitConfig['protocol']) {
     if (!protocol) {
       protocol = 'amqp://'
@@ -110,7 +130,7 @@ export default class RabbitConnection {
    */
   public async getConnection() {
     if (!this.$connection) {
-      this.$connection = await connect(this.url)
+      this.$connection = await connect(this.url, this.$parameters)
     }
 
     return this.$connection
